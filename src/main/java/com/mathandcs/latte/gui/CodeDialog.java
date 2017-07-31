@@ -2,6 +2,7 @@ package com.mathandcs.latte.gui;
 
 import javax.swing.*;
 import java.io.*;
+import com.mathandcs.latte.exception.ParseException;
 
 public class CodeDialog extends Reader {
     private String buffer = null;

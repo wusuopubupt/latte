@@ -1,5 +1,7 @@
 package com.mathandcs.latte;
 
+import com.mathandcs.latte.exception.ParseException;
+
 public abstract class Token {
 
     public static final int EOF_MARK = -1;

@@ -1,4 +1,4 @@
-package com.mathandcs.latte;
+package com.mathandcs.latte.exception;
 
 import com.mathandcs.latte.ast.ASTree;
 
