@@ -1,8 +1,8 @@
 package com.mathandcs.latte.parser;
 
 import com.mathandcs.latte.Lexer;
-import com.mathandcs.latte.ParseException;
-import com.mathandcs.latte.Token;
+import com.mathandcs.latte.exception.ParseException;
+import com.mathandcs.latte.tokens.Token;
 import com.mathandcs.latte.ast.*;
 import com.mathandcs.latte.parser.Parser.Operators;
 

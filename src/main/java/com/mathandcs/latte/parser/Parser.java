@@ -1,8 +1,8 @@
 package com.mathandcs.latte.parser;
 
 import com.mathandcs.latte.Lexer;
-import com.mathandcs.latte.ParseException;
-import com.mathandcs.latte.Token;
+import com.mathandcs.latte.exception.ParseException;
+import com.mathandcs.latte.tokens.*;
 import com.mathandcs.latte.ast.ASTLeaf;
 import com.mathandcs.latte.ast.ASTList;
 import com.mathandcs.latte.ast.ASTree;
@@ -15,9 +15,10 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Parser {
+
     protected static abstract class Element {
-        protected abstract void parse(Lexer lexer, List<ASTree> res)
-                throws ParseException;
+
+        protected abstract void parse(Lexer lexer, List<ASTree> res) throws ParseException;
 
         protected abstract boolean match(Lexer lexer) throws ParseException;
     }
@@ -29,8 +30,7 @@ public class Parser {
             parser = p;
         }
 
-        protected void parse(Lexer lexer, List<ASTree> res)
-                throws ParseException {
+        protected void parse(Lexer lexer, List<ASTree> res) throws ParseException {
             res.add(parser.parse(lexer));
         }
 

@@ -1,6 +1,8 @@
 package com.mathandcs.latte;
 
+import com.mathandcs.latte.exception.ParseException;
 import com.mathandcs.latte.gui.CodeDialog;
+import com.mathandcs.latte.tokens.Token;
 import org.junit.Test;
 
 /**

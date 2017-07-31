@@ -1,6 +1,6 @@
-package com.mathandcs.latte;
+package com.mathandcs.latte.tokens;
 
-import com.mathandcs.latte.exception.ParseException;
+import com.mathandcs.latte.exception.LatteException;
 
 public abstract class Token {
 

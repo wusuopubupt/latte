@@ -1,5 +1,11 @@
 package com.mathandcs.latte;
 
+import com.mathandcs.latte.exception.ParseException;
+import com.mathandcs.latte.tokens.IdToken;
+import com.mathandcs.latte.tokens.NumberToken;
+import com.mathandcs.latte.tokens.StringToken;
+import com.mathandcs.latte.tokens.Token;
+
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
@@ -77,9 +83,9 @@ public class Lexer {
             if (matcher.group(2) == null) { // if not a comment
                 Token token;
                 if (matcher.group(3) != null)
-                    token = new NumToken(lineNo, Integer.parseInt(m));
+                    token = new NumberToken(lineNo, Integer.parseInt(m));
                 else if (matcher.group(4) != null)
-                    token = new StrToken(lineNo, toStringLiteral(m));
+                    token = new StringToken(lineNo, toStringLiteral(m));
                 else
                     token = new IdToken(lineNo, m);
                 queue.add(token);
@@ -105,58 +111,4 @@ public class Lexer {
         return sb.toString();
     }
 
-    protected static class NumToken extends Token {
-        private int value;
-
-        protected NumToken(int line, int v) {
-            super(line);
-            value = v;
-        }
-
-        public boolean isNumber() {
-            return true;
-        }
-
-        public String getText() {
-            return Integer.toString(value);
-        }
-
-        public int getNumber() {
-            return value;
-        }
-    }
-
-    protected static class IdToken extends Token {
-        private String text;
-
-        protected IdToken(int line, String id) {
-            super(line);
-            text = id;
-        }
-
-        public boolean isIdentifier() {
-            return true;
-        }
-
-        public String getText() {
-            return text;
-        }
-    }
-
-    protected static class StrToken extends Token {
-        private String literal;
-
-        StrToken(int line, String str) {
-            super(line);
-            literal = str;
-        }
-
-        public boolean isString() {
-            return true;
-        }
-
-        public String getText() {
-            return literal;
-        }
-    }
 }

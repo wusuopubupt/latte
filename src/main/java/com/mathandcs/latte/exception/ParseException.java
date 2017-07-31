@@ -1,6 +1,7 @@
 package com.mathandcs.latte.exception;
 
-import com.mathandcs.latte.Token;
+import com.mathandcs.latte.tokens.Token;
+
 import java.io.IOException;
 
 

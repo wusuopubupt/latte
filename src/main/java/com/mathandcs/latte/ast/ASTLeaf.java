@@ -1,6 +1,6 @@
 package com.mathandcs.latte.ast;
 
-import com.mathandcs.latte.Token;
+import com.mathandcs.latte.tokens.Token;
 
 import java.util.ArrayList;
 import java.util.Iterator;
