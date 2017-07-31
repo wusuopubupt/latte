@@ -1,7 +1,7 @@
 package com.mathandcs.latte;
 
-import org.junit.Test;
 import com.mathandcs.latte.gui.CodeDialog;
+import org.junit.Test;
 
 /**
  * Created by dashwang on 7/31/17.
