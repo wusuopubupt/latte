@@ -14,7 +14,7 @@ public class LexerTest {
     public void testRead() throws ParseException {
         Lexer l = new Lexer(new CodeDialog());
         for (Token t; (t = l.read()) != Token.EOF; )
-            System.out.println("=> " + t.getText());
+            System.out.println(t.getLineNumber() + "=> " + t.getText());
     }
 }
 
