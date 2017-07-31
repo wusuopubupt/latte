@@ -10,10 +10,26 @@ import java.util.HashSet;
 
 import static com.mathandcs.latte.parser.Parser.rule;
 
+/**
+ *
+ *  BNF definitions:
+ *
+ *  primary		: "(" expr ")" | NUMBER | IDENTIFIER | STRING
+ *  factor		: "-" primary | primary
+ *  expr		: factor {OP factor}
+ *  block	    : "{" [ statement ] {(";" | EOL) [ statement ] } "}"
+ *  simple		: expr
+ *  statement   : "if" expr block [ "else" block ] 
+ *  			  | "while" expr block
+ *  			  | simple
+ *  program		: [ statement ] (";" | EOL)
+ *
+ */
 public class BasicParser {
     HashSet<String> reserved = new HashSet<String>();
     Operators operators = new Operators();
 
+	// an empty Parser
     private Parser expr0 = rule();
 
     private Parser primary = rule(PrimaryExpr.class)
@@ -22,8 +38,7 @@ public class BasicParser {
                     rule().identifier(Name.class, reserved),
                     rule().string(StringLiteral.class));
 
-    private Parser factor = rule().or(rule(NegativeExpr.class).sep("-").ast(primary),
-            primary);
+    private Parser factor = rule().or(rule(NegativeExpr.class).sep("-").ast(primary), primary);
 
     private Parser expr = expr0.expression(BinaryExpr.class, factor, operators);
 
