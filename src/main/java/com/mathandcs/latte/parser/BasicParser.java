@@ -11,25 +11,23 @@ import java.util.HashSet;
 import static com.mathandcs.latte.parser.Parser.rule;
 
 /**
- *
- *  BNF definitions:
- *
- *  primary		: "(" expr ")" | NUMBER | IDENTIFIER | STRING
- *  factor		: "-" primary | primary
- *  expr		: factor {OP factor}
- *  block	    : "{" [ statement ] {(";" | EOL) [ statement ] } "}"
- *  simple		: expr
- *  statement   : "if" expr block [ "else" block ] 
- *  			  | "while" expr block
- *  			  | simple
- *  program		: [ statement ] (";" | EOL)
- *
+ * BNF definitions:
+ * <p>
+ * primary		: "(" expr ")" | NUMBER | IDENTIFIER | STRING
+ * factor		: "-" primary | primary
+ * expr		: factor {OP factor}
+ * block	    : "{" [ statement ] {(";" | EOL) [ statement ] } "}"
+ * simple		: expr
+ * statement   : "if" expr block [ "else" block ]
+ * | "while" expr block
+ * | simple
+ * program		: [ statement ] (";" | EOL)
  */
 public class BasicParser {
     HashSet<String> reserved = new HashSet<String>();
     Operators operators = new Operators();
 
-	// an empty Parser
+    // an empty Parser
     private Parser expr0 = rule();
 
     private Parser primary = rule(PrimaryExpr.class)
@@ -44,7 +42,7 @@ public class BasicParser {
 
     private Parser statement0 = rule();
 
-    private Parser block = rule(BlockStmnt.class)
+    private Parser block = rule(BlockStatement.class)
             .sep("{").option(statement0)
             .repeat(rule().sep(";", Token.EOL).option(statement0))
             .sep("}");
@@ -52,12 +50,12 @@ public class BasicParser {
     private Parser simple = rule(PrimaryExpr.class).ast(expr);
 
     private Parser statement = statement0.or(
-            rule(IfStmnt.class).sep("if").ast(expr).ast(block)
+            rule(IfStatement.class).sep("if").ast(expr).ast(block)
                     .option(rule().sep("else").ast(block)),
-            rule(WhileStmnt.class).sep("while").ast(expr).ast(block),
+            rule(WhileStatement.class).sep("while").ast(expr).ast(block),
             simple);
 
-    private Parser program = rule().or(statement, rule(NullStmnt.class))
+    private Parser program = rule().or(statement, rule(NullStatement.class))
             .sep(";", Token.EOL);
 
     public BasicParser() {

@@ -1,5 +1,6 @@
 package com.mathandcs.latte.ast;
 
+import com.mathandcs.latte.env.Environment;
 import com.mathandcs.latte.tokens.Token;
 
 import java.util.ArrayList;
@@ -31,6 +32,10 @@ public class ASTLeaf extends ASTree {
 
     public String location() {
         return "at line " + token.getLineNumber();
+    }
+
+    public Object evaluate(Environment env) {
+        return null;
     }
 
     public Token token() {

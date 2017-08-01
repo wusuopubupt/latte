@@ -1,9 +1,11 @@
 package com.mathandcs.latte.ast;
 
+import com.mathandcs.latte.env.Environment;
+
 import java.util.List;
 import java.util.Iterator;
 
-public abstract class ASTList extends ASTree {
+public class ASTList extends ASTree {
 
     protected List<ASTree> children;
 
@@ -41,6 +43,10 @@ public abstract class ASTList extends ASTree {
             if (s != null)
                 return s;
         }
+        return null;
+    }
+
+    public Object evaluate(Environment env) {
         return null;
     }
 }

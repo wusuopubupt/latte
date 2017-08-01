@@ -4,8 +4,8 @@ import com.mathandcs.latte.env.Environment;
 
 import java.util.List;
 
-public class ClassBody extends ASTList {
-    public ClassBody(List<ASTree> c) {
+public class BlockStatement extends ASTList {
+    public BlockStatement(List<ASTree> c) {
         super(c);
     }
 

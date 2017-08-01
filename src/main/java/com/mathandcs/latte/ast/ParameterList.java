@@ -1,5 +1,7 @@
 package com.mathandcs.latte.ast;
 
+import com.mathandcs.latte.env.Environment;
+
 import java.util.List;
 
 public class ParameterList extends ASTList {
@@ -13,5 +15,9 @@ public class ParameterList extends ASTList {
 
     public int size() {
         return numChildren();
+    }
+
+    public Object evaluate(Environment env) {
+        return null;
     }
 }
