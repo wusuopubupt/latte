@@ -1,5 +1,7 @@
 package com.mathandcs.latte.ast;
 
+import com.mathandcs.latte.env.Environment;
+
 import java.util.Iterator;
 
 public abstract class ASTree implements Iterable<ASTree> {
@@ -14,4 +16,6 @@ public abstract class ASTree implements Iterable<ASTree> {
     public Iterator<ASTree> iterator() {
         return children();
     }
+
+    public abstract Object evaluate(Environment env);
 }

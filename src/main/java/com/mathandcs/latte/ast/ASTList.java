@@ -3,7 +3,8 @@ package com.mathandcs.latte.ast;
 import java.util.List;
 import java.util.Iterator;
 
-public class ASTList extends ASTree {
+public abstract class ASTList extends ASTree {
+
     protected List<ASTree> children;
 
     public ASTList(List<ASTree> list) {
