@@ -47,14 +47,7 @@ class CalculatorParser extends JavaTokenParsers {
   }
 
   def evaluate(e: Expression): Double = {
-    simplify(e) match {
-      case Number(x) => x
-      case UnaryOp("-", x) => -(evaluate(x))
-      case BinaryOp("+", x1, x2) => (evaluate(x1) + evaluate(x2))
-      case BinaryOp("-", x1, x2) => (evaluate(x1) - evaluate(x2))
-      case BinaryOp("*", x1, x2) => (evaluate(x1) * evaluate(x2))
-      case BinaryOp("/", x1, x2) => (evaluate(x1) / evaluate(x2))
-    }
+    simplify(e).eval()
   }
 
   // 表达式化简
@@ -88,21 +81,22 @@ object CalculatorParser {
   def main(args: Array[String]) {
     val parser = new CalculatorParser
     val expressions = List(
-      "5",
-      "(5)",
-      "5+ 5",
-      "5 + 5",
-      "(5 + 5)",
-      "5 + 5 + 5",
-      "(5 + 5) + 5",
-      "(5 + 5) + (5 + 5)",
-      "(5 * 5) / (5 * 5)",
-      "5 - 5",
-      "5 - 5 - 5",
-      "(5 - 5) - 5",
-      "5 * 5 * 5",
-      "5 / 5 / 5",
-      "(5 / 5) / 5"
+      "1",
+      "(1)",
+      "1+ 1",
+      "1 + 1",
+      "-1 + 1",
+      "(1 + 1)",
+      "1 + 1 + 1",
+      "(1 + 1) + 1",
+      "(1 + 1) + (1 + 1)",
+      "(1 * 1) / (1 * 1)",
+      "1 - 1",
+      "1 - 1 - 1",
+      "(1 - 1) - 1",
+      "1 * 1 * 1",
+      "1 / 1 / 1",
+      "(1 / 1) / 1"
     )
     for (x <- expressions)
       println(x + " => " + parser.evaluate(x))
