@@ -1,6 +1,7 @@
 package com.mathandcs.latte;
 
 import com.mathandcs.latte.ast.ASTree;
+import com.mathandcs.latte.env.Environment;
 import com.mathandcs.latte.exception.ParseException;
 import com.mathandcs.latte.gui.CodeDialog;
 import com.mathandcs.latte.parser.BasicParser;
