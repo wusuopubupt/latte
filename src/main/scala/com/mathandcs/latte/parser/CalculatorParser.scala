@@ -7,18 +7,31 @@ import scala.util.parsing.combinator.JavaTokenParsers
 class CalculatorParser extends JavaTokenParsers {
 
   // 解析器组合子
-  def expression: Parser[Expression] =
-    (term ~ "+" ~ term) ^^ { case lhs ~ plus ~ rhs => BinaryOp("+", lhs, rhs) } |
-      (term ~ "-" ~ term) ^^ { case lhs ~ minus ~ rhs => BinaryOp("-", lhs, rhs) } |
-      term
+  def expression: Parser[Expression] = term ~ rep(("+" | "-") ~ term) ^^ {
+    case t ~ list => list.foldLeft(t)(
+      (res, e) => {
+        e match {
+          case "+" ~ num => BinaryOp("+", res, num)
+          case "-" ~ num => BinaryOp("-", res, num)
+        }
+      }
+    )
+  }
 
-  def term: Parser[Expression] =
-    (factor ~ "*" ~ factor) ^^ { case lhs ~ times ~ rhs => BinaryOp("*", lhs, rhs) } |
-      (factor ~ "/" ~ factor) ^^ { case lhs ~ div ~ rhs => BinaryOp("/", lhs, rhs) } |
-      factor
+  // 解决了1*2*3的问题, rep -> (t ~ list => list.foldleft(t))
+  // https://github.com/wusuopubupt/scala-for-the-impatient/blob/master/src/main/scala/com/basile/scala/ch19/Ex10.scala
+  def term: Parser[Expression] = factor ~ rep(("*" | "/") ~ factor) ^^ {
+    case t ~ list => list.foldLeft(t)(
+      (res, e) => {
+        e match {
+          case "*" ~ num => BinaryOp("*", res, num)
+          case "/" ~ num => BinaryOp("/", res, num)
+        }
+      }
+    )
+  }
 
-  def factor: Parser[Expression] =
-    "(" ~> expression <~ ")" | floatingPointNumber ^^ { x => Number(x.toFloat) }
+  def factor: Parser[Expression] = "(" ~> expression <~ ")" | floatingPointNumber ^^ (x => Number(x.toDouble))
 
   def evaluate(text: String): Double = {
     // RegexParser.scala: def parseAll[T](p: Parser[T], in: java.lang.CharSequence): ParseResult[T]
@@ -77,17 +90,18 @@ object CalculatorParser {
     val expressions = List(
       "5",
       "(5)",
+      "5+ 5",
       "5 + 5",
       "(5 + 5)",
-      // "5 + 5 + 5",
+      "5 + 5 + 5",
       "(5 + 5) + 5",
       "(5 + 5) + (5 + 5)",
       "(5 * 5) / (5 * 5)",
       "5 - 5",
-      //  "5 - 5 - 5",
+      "5 - 5 - 5",
       "(5 - 5) - 5",
-      // "5 * 5 * 5",
-      // "5 / 5 / 5",
+      "5 * 5 * 5",
+      "5 / 5 / 5",
       "(5 / 5) / 5"
     )
     for (x <- expressions)
