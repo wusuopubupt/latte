@@ -1,7 +1,7 @@
 package com.mathandcs.latte.antlr4;
 
 /**
- * Created by wangdongxu on 10/24/17.
+ * Created by dash wang on 10/24/17.
  */
 public class CalcVisitorImpl extends CalcBaseVisitor<Double> {
 

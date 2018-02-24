@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by wangdongxu on 10/24/17.
+ * Created by dash wang on 10/24/17.
  */
 public class Context {
     private static Context ourInstance = new Context();

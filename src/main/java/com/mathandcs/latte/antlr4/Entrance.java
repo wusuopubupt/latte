@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.util.Scanner;
 
 /**
- * Created by wangdongxu on 10/24/17.
+ * Created by dash wang on 10/24/17.
  */
 public class Entrance {
 

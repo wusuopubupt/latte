@@ -1,18 +1,10 @@
 package com.mathandcs.latte.ast;
 
-import com.mathandcs.latte.env.Environment;
-import com.mathandcs.latte.tokens.Token;
+import java.util.List;
 
-public class NullStatement extends ASTLeaf {
-    public NullStatement(Token t) {
-        super(t);
-    }
+public class NullStatement extends ASTList {
 
-    public String name() {
-        return token().getText();
-    }
-
-    public Object evaluate(Environment env) {
-        return name();
+    public NullStatement(List<ASTree> list) {
+        super(list);
     }
 }
