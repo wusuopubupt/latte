@@ -23,6 +23,13 @@ public class WhileStatement extends ASTList {
     }
 
     public Object evaluate(Environment env) {
-        return null;
+        Object result = null;
+        while (true) {
+            if ((Boolean) condition.evaluate(env)) {
+                result = body.evaluate(env);
+            } else {
+                return result;
+            }
+        }
     }
 }

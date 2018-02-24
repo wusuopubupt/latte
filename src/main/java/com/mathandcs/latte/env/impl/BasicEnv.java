@@ -2,7 +2,6 @@ package com.mathandcs.latte.env.impl;
 
 import com.mathandcs.latte.env.Environment;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -10,7 +9,11 @@ import java.util.Map;
  */
 public class BasicEnv implements Environment {
 
-    Map<Object, Object> envMap = new HashMap<>();
+    Map<Object, Object> envMap;
+
+    public BasicEnv(Map<Object, Object> envMap) {
+        this.envMap = envMap;
+    }
 
     @Override
     public void put(Object key, Object val) {

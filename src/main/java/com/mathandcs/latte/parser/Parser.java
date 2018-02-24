@@ -1,11 +1,11 @@
 package com.mathandcs.latte.parser;
 
 import com.mathandcs.latte.Lexer;
-import com.mathandcs.latte.exception.ParseException;
-import com.mathandcs.latte.tokens.*;
 import com.mathandcs.latte.ast.ASTLeaf;
 import com.mathandcs.latte.ast.ASTList;
 import com.mathandcs.latte.ast.ASTree;
+import com.mathandcs.latte.exception.ParseException;
+import com.mathandcs.latte.tokens.Token;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
 
 public class Parser {
 
@@ -50,9 +51,9 @@ public class Parser {
             Parser p = choose(lexer);
             if (p == null) {
                 throw new ParseException(lexer.peek(0));
-			} else {
+            } else {
                 res.add(p.parse(lexer));
-			}
+            }
         }
 
         protected boolean match(Lexer lexer) throws ParseException {
@@ -63,8 +64,8 @@ public class Parser {
             for (Parser p : parsers) {
                 if (p.match(lexer)) {
                     return p;
-				}
-			}
+                }
+            }
 
             return null;
         }
@@ -91,10 +92,10 @@ public class Parser {
                 ASTree t = parser.parse(lexer);
                 if (t.getClass() != ASTList.class || t.numChildren() > 0) {
                     res.add(t);
-				}
+                }
                 if (onlyOnce) {
                     break;
-				}
+                }
             }
         }
 
@@ -109,18 +110,18 @@ public class Parser {
         protected AToken(Class<? extends ASTLeaf> type) {
             if (type == null) {
                 type = ASTLeaf.class;
-			}
+            }
             factory = Factory.get(type, Token.class);
         }
 
         protected void parse(Lexer lexer, List<ASTree> res) throws ParseException {
             Token t = lexer.read();
-            if (test(t)) { 
+            if (test(t)) {
                 ASTree leaf = factory.make(t);
                 res.add(leaf);
             } else {
                 throw new ParseException(t);
-			}
+            }
         }
 
         protected boolean match(Lexer lexer) throws ParseException {
@@ -178,14 +179,14 @@ public class Parser {
                         find(res, t);
                         return;
                     }
-				}
-			}
+                }
+            }
 
             if (tokens.length > 0) {
                 throw new ParseException(tokens[0] + " expected.", t);
-			} else {
+            } else {
                 throw new ParseException(t);
-			}
+            }
         }
 
         protected void find(List<ASTree> res, Token t) {
@@ -198,9 +199,9 @@ public class Parser {
                 for (String token : tokens) {
                     if (token.equals(t.getText())) {
                         return true;
-					}
-				}
-			}
+                    }
+                }
+            }
 
             return false;
         }
@@ -250,7 +251,7 @@ public class Parser {
             Precedence prec;
             while ((prec = nextOperator(lexer)) != null) {
                 right = doShift(lexer, right, prec.value);
-			}
+            }
 
             res.add(right);
         }
@@ -263,7 +264,7 @@ public class Parser {
             Precedence next;
             while ((next = nextOperator(lexer)) != null && rightIsExpr(prec, next)) {
                 right = doShift(lexer, right, next.value);
-			}
+            }
 
             list.add(right);
             return factory.make(list);
@@ -273,17 +274,17 @@ public class Parser {
             Token t = lexer.peek(0);
             if (t.isIdentifier()) {
                 return ops.get(t.getText());
-			} else {
+            } else {
                 return null;
-			}
+            }
         }
 
         private static boolean rightIsExpr(int prec, Precedence nextPrec) {
             if (nextPrec.leftAssoc) {
                 return prec < nextPrec.value;
-			} else {
+            } else {
                 return prec <= nextPrec.value;
-			}
+            }
         }
 
         protected boolean match(Lexer lexer) throws ParseException {
@@ -314,19 +315,19 @@ public class Parser {
                         List<ASTree> results = (List<ASTree>) arg;
                         if (results.size() == 1) {
                             return results.get(0);
-						} else {
+                        } else {
                             return new ASTList(results);
-						}
+                        }
                     }
                 };
-			}
+            }
             return f;
         }
 
         protected static Factory get(Class<? extends ASTree> clazz, Class<?> argType) {
             if (clazz == null) {
                 return null;
-			}
+            }
             try {
                 final Method m = clazz.getMethod(factoryName, new Class<?>[]{argType});
                 return new Factory() {
@@ -362,10 +363,10 @@ public class Parser {
     }
 
     public ASTree parse(Lexer lexer) throws ParseException {
-        ArrayList<ASTree> results = new ArrayList<ASTree>();
+        List<ASTree> results = new ArrayList<>();
         for (Element e : elements) {
             e.parse(lexer, results);
-		}
+        }
 
         return factory.make(results);
     }
@@ -373,8 +374,7 @@ public class Parser {
     protected boolean match(Lexer lexer) throws ParseException {
         if (elements.size() == 0) {
             return true;
-		}
-        else {
+        } else {
             Element e = elements.get(0);
             return e.match(lexer);
         }
@@ -389,12 +389,12 @@ public class Parser {
     }
 
     public Parser reset() {
-        elements = new ArrayList<Element>();
+        elements = new ArrayList<>();
         return this;
     }
 
     public Parser reset(Class<? extends ASTree> clazz) {
-        elements = new ArrayList<Element>();
+        elements = new ArrayList<>();
         factory = Factory.getForASTList(clazz);
         return this;
     }

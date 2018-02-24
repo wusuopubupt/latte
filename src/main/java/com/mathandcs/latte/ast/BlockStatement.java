@@ -10,6 +10,12 @@ public class BlockStatement extends ASTList {
     }
 
     public Object evaluate(Environment env) {
-        return null;
+        Object ret = 0;
+        for (ASTree tree : children) {
+            if (!(tree instanceof NullStatement)) {
+                ret = tree.evaluate(env);
+            }
+        }
+        return ret;
     }
 }

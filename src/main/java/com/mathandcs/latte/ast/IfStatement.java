@@ -15,7 +15,6 @@ public class IfStatement extends ASTList {
     @Getter
     private ASTree elseBlock;
 
-
     public IfStatement(List<ASTree> c) {
         super(c);
         if (numChildren() < 2) {
@@ -32,6 +31,11 @@ public class IfStatement extends ASTList {
     }
 
     public Object evaluate(Environment env) {
-        return null;
+        Boolean cond = (Boolean) condition.evaluate(env);
+        if (cond) {
+            return thenBlock.evaluate(env);
+        } else {
+            return elseBlock.evaluate(env);
+        }
     }
 }
