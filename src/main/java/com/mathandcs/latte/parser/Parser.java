@@ -15,10 +15,9 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- *
- *                    Element
- *                      | (parse)
- *                      | (match)
+ * Element
+ * | (parse)
+ * | (match)
  * --------------------------------------------------
  * |        |        |        |      |         |
  * AToken  Expr    Repeat   OrTree   Tree     Leaf
@@ -26,7 +25,6 @@ import java.util.List;
  * -----------------------                    ---
  * |          |          |                     |
  * NumToken  StrToken  IdToken                Skip
- *
  */
 public class Parser {
 
@@ -88,6 +86,12 @@ public class Parser {
             newParsers[0] = p;
             System.arraycopy(parsers, 0, newParsers, 1, parsers.length);
             parsers = newParsers;
+        }
+    }
+
+    protected static class RepeatOnce extends Repeat {
+        protected RepeatOnce(Parser p) {
+            super(p, true);
         }
     }
 
@@ -394,11 +398,11 @@ public class Parser {
         }
     }
 
-    public static Parser rule() {
-        return rule(null);
+    public static Parser newParser() {
+        return newParser(null);
     }
 
-    public static Parser rule(Class<? extends ASTree> clazz) {
+    public static Parser newParser(Class<? extends ASTree> clazz) {
         return new Parser(clazz);
     }
 
@@ -467,8 +471,9 @@ public class Parser {
         return this;
     }
 
-    public Parser option(Parser p) {
-        elements.add(new Repeat(p, true));
+    // Represent for [] in BNF
+    public Parser option (Parser p) {
+        elements.add(new RepeatOnce(p));
         return this;
     }
 

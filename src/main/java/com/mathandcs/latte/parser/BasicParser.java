@@ -8,7 +8,7 @@ import com.mathandcs.latte.tokens.Token;
 
 import java.util.HashSet;
 
-import static com.mathandcs.latte.parser.Parser.rule;
+import static com.mathandcs.latte.parser.Parser.newParser;
 
 /**
  * BNF definitions:
@@ -27,35 +27,36 @@ public class BasicParser {
     HashSet<String> reserved = new HashSet<String>();
     Operators operators = new Operators();
 
-    // an empty Parser
-    private Parser expr0 = rule();
+    // 因为要递归引用(此时expr还不存在),所以先声明为空的Parser, 在创建expr时更新expr0, 引用传递
+    private Parser expr0 = newParser();
 
-    private Parser primary = rule(PrimaryExpr.class)
-            .or(rule().sep("(").ast(expr0).sep(")"),
-                    rule().number(NumberLiteral.class),
-                    rule().identifier(Variable.class, reserved),
-                    rule().string(StringLiteral.class));
+    private Parser primary = newParser(PrimaryExpr.class)
+            .or(newParser().sep("(").ast(expr0).sep(")"),
+                    newParser().number(NumberLiteral.class),
+                    newParser().identifier(Variable.class, reserved),
+                    newParser().string(StringLiteral.class));
 
-    private Parser factor = rule().or(rule(NegativeExpr.class).sep("-").ast(primary), primary);
+    private Parser factor = newParser().or(newParser(NegativeExpr.class).sep("-").ast(primary), primary);
 
     private Parser expr = expr0.expression(BinaryExpr.class, factor, operators);
 
-    private Parser statement0 = rule();
+    // 和expr0同理
+    private Parser statement0 = newParser();
 
-    private Parser block = rule(BlockStatement.class)
+    private Parser block = newParser(BlockStatement.class)
             .sep("{").option(statement0)
-            .repeat(rule().sep(";", Token.EOL).option(statement0))
+            .repeat(newParser().sep(";", Token.EOL).option(statement0))
             .sep("}");
 
-    private Parser simple = rule(PrimaryExpr.class).ast(expr);
+    private Parser simple = newParser(PrimaryExpr.class).ast(expr);
 
     private Parser statement = statement0.or(
-            rule(IfStatement.class).sep("if").ast(expr).ast(block)
-                    .option(rule().sep("else").ast(block)),
-            rule(WhileStatement.class).sep("while").ast(expr).ast(block),
+            newParser(IfStatement.class).sep("if").ast(expr).ast(block)
+                    .option(newParser().sep("else").ast(block)),
+            newParser(WhileStatement.class).sep("while").ast(expr).ast(block),
             simple);
 
-    private Parser program = rule().or(statement, rule(NullStatement.class))
+    private Parser program = newParser().or(statement, newParser(NullStatement.class))
             .sep(";", Token.EOL);
 
     public BasicParser() {
