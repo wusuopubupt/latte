@@ -14,7 +14,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-
+/**
+ *
+ *                    Element
+ *                      | (parse)
+ *                      | (match)
+ * --------------------------------------------------
+ * |        |        |        |      |         |
+ * AToken  Expr    Repeat   OrTree   Tree     Leaf
+ * |                                           |
+ * -----------------------                    ---
+ * |          |          |                     |
+ * NumToken  StrToken  IdToken                Skip
+ *
+ */
 public class Parser {
 
     protected static abstract class Element {
@@ -117,6 +130,7 @@ public class Parser {
         protected void parse(Lexer lexer, List<ASTree> res) throws ParseException {
             Token t = lexer.read();
             if (test(t)) {
+                // build AST by a single token (NumberToken or StringToken or IdentifierToken)
                 ASTree leaf = factory.make(t);
                 res.add(leaf);
             } else {
@@ -218,11 +232,11 @@ public class Parser {
 
     public static class Precedence {
         int value;
-        boolean leftAssoc; // left associative
+        boolean isLeftAssociative; // left associative
 
         public Precedence(int v, boolean a) {
             value = v;
-            leftAssoc = a;
+            isLeftAssociative = a;
         }
     }
 
@@ -280,7 +294,7 @@ public class Parser {
         }
 
         private static boolean rightIsExpr(int prec, Precedence nextPrec) {
-            if (nextPrec.leftAssoc) {
+            if (nextPrec.isLeftAssociative) {
                 return prec < nextPrec.value;
             } else {
                 return prec <= nextPrec.value;
