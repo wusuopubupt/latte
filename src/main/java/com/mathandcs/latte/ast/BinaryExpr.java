@@ -51,8 +51,8 @@ public class BinaryExpr extends ASTList {
      * left value must be Name
      */
     protected Object computeAssign(Environment env, Object rightValue) {
-        if (left instanceof Name) {
-            env.put(((Name) left).name(), rightValue);
+        if (left instanceof Variable) {
+            env.put(((Variable) left).value(), rightValue);
             return rightValue;
         } else {
             throw new LatteException("bad assignment, left is not Name!", this);

@@ -1,10 +1,10 @@
 package com.mathandcs.latte.parser;
 
 import com.mathandcs.latte.Lexer;
-import com.mathandcs.latte.exception.ParseException;
-import com.mathandcs.latte.tokens.Token;
 import com.mathandcs.latte.ast.*;
+import com.mathandcs.latte.exception.ParseException;
 import com.mathandcs.latte.parser.Parser.Operators;
+import com.mathandcs.latte.tokens.Token;
 
 import java.util.HashSet;
 
@@ -16,7 +16,7 @@ import static com.mathandcs.latte.parser.Parser.rule;
  * primary		: "(" expr ")" | NUMBER | IDENTIFIER | STRING
  * factor		: "-" primary | primary
  * expr		: factor {OP factor}
- * block	    : "{" [ statement ] {(";" | EOL) [ statement ] } "}"
+ * block	    : "{" [ statement ] {(";" | EOL) [z statement ] } "}"
  * simple		: expr
  * statement   : "if" expr block [ "else" block ]
  * | "while" expr block
@@ -33,7 +33,7 @@ public class BasicParser {
     private Parser primary = rule(PrimaryExpr.class)
             .or(rule().sep("(").ast(expr0).sep(")"),
                     rule().number(NumberLiteral.class),
-                    rule().identifier(Name.class, reserved),
+                    rule().identifier(Variable.class, reserved),
                     rule().string(StringLiteral.class));
 
     private Parser factor = rule().or(rule(NegativeExpr.class).sep("-").ast(primary), primary);
