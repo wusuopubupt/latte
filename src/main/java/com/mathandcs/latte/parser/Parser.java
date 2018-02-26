@@ -80,13 +80,6 @@ public class Parser {
 
             return null;
         }
-
-        protected void insert(Parser p) {
-            Parser[] newParsers = new Parser[parsers.length + 1];
-            newParsers[0] = p;
-            System.arraycopy(parsers, 0, newParsers, 1, parsers.length);
-            parsers = newParsers;
-        }
     }
 
     protected static class RepeatOnce extends Repeat {
@@ -275,7 +268,7 @@ public class Parser {
         }
 
         private ASTree doShift(Lexer lexer, ASTree left, int prec) throws ParseException {
-            ArrayList<ASTree> list = new ArrayList<ASTree>();
+            ArrayList<ASTree> list = new ArrayList<>();
             list.add(left);
             list.add(new ASTLeaf(lexer.read()));
             ASTree right = factor.parse(lexer);
@@ -310,7 +303,7 @@ public class Parser {
         }
     }
 
-    public static final String factoryName = "create";
+    public static final String FACTORY_NAME = "create";
 
     protected static abstract class Factory {
         protected abstract ASTree make0(Object arg) throws Exception;
@@ -347,7 +340,7 @@ public class Parser {
                 return null;
             }
             try {
-                final Method m = clazz.getMethod(factoryName, new Class<?>[]{argType});
+                final Method m = clazz.getMethod(FACTORY_NAME, new Class<?>[]{argType});
                 return new Factory() {
                     protected ASTree make0(Object arg) throws Exception {
                         return (ASTree) m.invoke(null, arg);
@@ -406,19 +399,10 @@ public class Parser {
         return new Parser(clazz);
     }
 
-    public Parser reset() {
-        elements = new ArrayList<>();
-        return this;
-    }
-
     public Parser reset(Class<? extends ASTree> clazz) {
         elements = new ArrayList<>();
         factory = Factory.getForASTList(clazz);
         return this;
-    }
-
-    public Parser number() {
-        return number(null);
     }
 
     public Parser number(Class<? extends ASTLeaf> clazz) {
@@ -426,17 +410,9 @@ public class Parser {
         return this;
     }
 
-    public Parser identifier(HashSet<String> reserved) {
-        return identifier(null, reserved);
-    }
-
     public Parser identifier(Class<? extends ASTLeaf> clazz, HashSet<String> reserved) {
         elements.add(new IdToken(clazz, reserved));
         return this;
-    }
-
-    public Parser string() {
-        return string(null);
     }
 
     public Parser string(Class<? extends ASTLeaf> clazz) {
@@ -449,25 +425,21 @@ public class Parser {
         return this;
     }
 
+    // Separator
     public Parser sep(String... pat) {
         elements.add(new Skip(pat));
         return this;
     }
 
+    // Abstract syntax tree
     public Parser ast(Parser p) {
         elements.add(new Tree(p));
         return this;
     }
 
+    // Represent for | in BNF
     public Parser or(Parser... p) {
         elements.add(new OrTree(p));
-        return this;
-    }
-
-    public Parser maybe(Parser p) {
-        Parser p2 = new Parser(p);
-        p2.reset();
-        elements.add(new OrTree(new Parser[]{p, p2}));
         return this;
     }
 
@@ -477,30 +449,16 @@ public class Parser {
         return this;
     }
 
+    // Repeat Parser
     public Parser repeat(Parser p) {
         elements.add(new Repeat(p, false));
         return this;
     }
 
-    public Parser expression(Parser subexp, Operators operators) {
-        elements.add(new Expr(null, subexp, operators));
-        return this;
-    }
-
+    // Expression
     public Parser expression(Class<? extends ASTree> clazz, Parser subexp, Operators operators) {
         elements.add(new Expr(clazz, subexp, operators));
         return this;
     }
 
-    public Parser insertChoice(Parser p) {
-        Element e = elements.get(0);
-        if (e instanceof OrTree)
-            ((OrTree) e).insert(p);
-        else {
-            Parser otherwise = new Parser(this);
-            reset(null);
-            or(p, otherwise);
-        }
-        return this;
-    }
 }
