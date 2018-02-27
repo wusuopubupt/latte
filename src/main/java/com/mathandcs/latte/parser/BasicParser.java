@@ -24,7 +24,7 @@ import static com.mathandcs.latte.parser.Parser.newParser;
  * program		: [ statement ] (";" | EOL)
  */
 public class BasicParser {
-    HashSet<String> reserved = new HashSet<String>();
+    HashSet<String> reserved = new HashSet<>();
     Operators operators = new Operators();
 
     // 因为要递归引用(此时expr还不存在),所以先声明为空的Parser, 在创建expr时更新expr0, 引用传递
