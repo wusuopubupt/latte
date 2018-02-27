@@ -66,7 +66,8 @@ public class ParserTest {
     @Test
     public void testParseString() throws Exception {
         StringBuilder sb = new StringBuilder("x = -1\n")
-                .append("if 1 > 2 {\n x = x+1\n} else {\nx = x + 2}\n")
+                //.append("if 1 > 2 {x=x+1} else {x=x+2}\n")
+                .append("if 1 > 2 {\nx = x+1;\n}  else {\nx = x + 2}\n")
                 .append("x");
 
         String s = sb.toString();
